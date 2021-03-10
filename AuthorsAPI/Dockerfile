@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["ProductsAPI/ProductsAPI.csproj", "ProductsAPI/"]
-RUN dotnet restore "ProductsAPI/ProductsAPI.csproj"
+COPY ["AuthorsAPI/AuthorsAPI.csproj", "AuthorsAPI/"]
+RUN dotnet restore "AuthorsAPI/AuthorsAPI.csproj"
 COPY . .
-WORKDIR "/src/ProductsAPI"
-RUN dotnet build "ProductsAPI.csproj" -c Release -o /app/build
+WORKDIR "/src/AuthorsAPI"
+RUN dotnet build "AuthorsAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ProductsAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "AuthorsAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ProductsAPI.dll"]
+ENTRYPOINT ["dotnet", "AuthorsAPI.dll"]
